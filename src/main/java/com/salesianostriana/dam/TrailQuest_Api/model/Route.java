@@ -1,9 +1,6 @@
-package model;
+package com.salesianostriana.dam.TrailQuest_Api.model;
 import jakarta.persistence.*;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+
 import java.util.UUID;
 
 @Entity

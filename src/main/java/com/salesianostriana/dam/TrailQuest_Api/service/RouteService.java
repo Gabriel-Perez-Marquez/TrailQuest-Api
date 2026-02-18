@@ -1,10 +1,9 @@
-package service;
+package com.salesianostriana.dam.TrailQuest_Api.service;
 
-import dto.RouteCreateDTO;
-import dto.RouteFilterDTO;
-import dto.RouteResponseDTO;
-import dto.RouteUpdateDTO;
-import model.Route;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteCreateDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteFilterDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteResponseDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteUpdateDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,4 +1,4 @@
-package dto;
+package com.salesianostriana.dam.TrailQuest_Api.dto;
 import jakarta.validation.constraints.*;
 import java.util.UUID;
 

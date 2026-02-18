@@ -1,9 +1,9 @@
-package controller;
+package com.salesianostriana.dam.TrailQuest_Api.controller;
 
-import dto.RouteCreateDTO;
-import dto.RouteFilterDTO;
-import dto.RouteResponseDTO;
-import dto.RouteUpdateDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteCreateDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteFilterDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteResponseDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,9 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.RouteService;
-
-import java.util.UUID;
+import com.salesianostriana.dam.TrailQuest_Api.service.RouteService;
 
 @RestController
 @RequestMapping("/api/routes")

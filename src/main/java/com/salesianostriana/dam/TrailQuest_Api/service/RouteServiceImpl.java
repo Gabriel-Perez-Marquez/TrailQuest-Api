@@ -1,22 +1,20 @@
-package service;
+package com.salesianostriana.dam.TrailQuest_Api.service;
 
-import dto.RouteCreateDTO;
-import dto.RouteFilterDTO;
-import dto.RouteResponseDTO;
-import dto.RouteUpdateDTO;
-import exception.ResourceNotFoundException;
-import model.PosiblesRegiones;
-import model.Route;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteCreateDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteFilterDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteResponseDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteUpdateDTO;
+import com.salesianostriana.dam.TrailQuest_Api.exception.ResourceNotFoundException;
+import com.salesianostriana.dam.TrailQuest_Api.model.PosiblesRegiones;
+import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import repository.RouteRepository;
-import specification.RouteSpecification;
-
-import java.util.UUID;
+import com.salesianostriana.dam.TrailQuest_Api.repository.RouteRepository;
+import com.salesianostriana.dam.TrailQuest_Api.specification.RouteSpecification;
 
 @Service
 @Transactional

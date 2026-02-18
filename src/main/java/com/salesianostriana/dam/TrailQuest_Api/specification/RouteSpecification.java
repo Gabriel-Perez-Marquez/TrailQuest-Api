@@ -1,8 +1,8 @@
-package specification;
+package com.salesianostriana.dam.TrailQuest_Api.specification;
 
-import dto.RouteFilterDTO;
-import model.PosiblesRegiones;
-import model.Route;
+import com.salesianostriana.dam.TrailQuest_Api.dto.RouteFilterDTO;
+import com.salesianostriana.dam.TrailQuest_Api.model.PosiblesRegiones;
+import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
