@@ -88,7 +88,6 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public Page<RouteResponseDTO> filterRoutes(RouteFilterDTO filterDTO, Pageable pageable) {
-        // Aplicar ordenación si se especifica
         if (filterDTO.sortBy() != null && !filterDTO.sortBy().isEmpty()) {
             Sort.Direction direction = Sort.Direction.ASC;
             if ("desc".equalsIgnoreCase(filterDTO.sortDirection())) {
