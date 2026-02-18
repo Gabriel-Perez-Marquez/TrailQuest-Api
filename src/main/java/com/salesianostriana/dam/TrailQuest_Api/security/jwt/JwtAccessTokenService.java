@@ -2,6 +2,9 @@ package com.salesianostriana.dam.TrailQuest_Api.security.jwt;
 
 
 import com.salesianostriana.dam.TrailQuest_Api.model.User;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -58,25 +61,6 @@ public class JwtAccessTokenService {
     }
 
 
-    public boolean validateAccessToken(String token) throws JwtException {
-       /* try {
-            //jwtParser.parseSignedClaimsJws(token);
-            jwtParser.parseSignedClaims(token);
-            return true;
-        } //catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
-         catch (JwtException ex) {
-            //throw new JwtException(ex.getMessage());
-             throw ex;
-        }*/
-        jwtParser.parseSignedClaims(token);
-        return true;
-    }
 
-    public String getUserIdFromAccessToken(String token) {
-        return jwtParser
-                .parseSignedClaims(token)
-                .getBody()
-                .getSubject();
-    }
 
 }
