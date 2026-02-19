@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.TrailQuest_Api.dto.auth.poi;
 
 import com.salesianostriana.dam.TrailQuest_Api.validation.ValidCoordinates;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
