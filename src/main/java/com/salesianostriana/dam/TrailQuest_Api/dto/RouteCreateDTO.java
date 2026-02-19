@@ -7,7 +7,7 @@ public record RouteCreateDTO(
         @Size(min = 3, max = 200, message = "El título debe tener entre 3 y 200 caracteres")
         String title,
 
-        @NotNull(message = "La región es obligatoria")
+        @NotBlank(message = "La región es obligatoria")
         String region,
 
         @NotNull(message = "La distancia es obligatoria")
