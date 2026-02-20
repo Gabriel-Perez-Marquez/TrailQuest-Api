@@ -1,8 +1,10 @@
 package com.salesianostriana.dam.TrailQuest_Api.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "pois")
@@ -19,6 +21,7 @@ public class Poi {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "route_id", nullable = false)
+    @NotNull(message = "El punto de interes debe pertenecer a una ruta")
     private Route route;
 
     @Column(nullable = false)
@@ -32,6 +35,31 @@ public class Poi {
     @Column(nullable = false)
     private Double lon;
 
-    private String photoField;
+    private String photoFileId;
+
+    @DecimalMin(value = "0.0") @DecimalMax(value = "5.0")
+    private double rating;
+
+    @PositiveOrZero
+    private int reviews;
+
+    @NotBlank
+    private String difficulty;
+
+    @NotBlank
+    private String duration;
+
+    @NotBlank
+    private String type;
+
+    @Column(columnDefinition = "TEXT")
+    @Size(max = 1000)
+    private String description;
+
+    @Column(columnDefinition = "TEXT")
+    private String historicalNote;
+
+    @ElementCollection
+    private List<String> features;
 
 }
