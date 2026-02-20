@@ -1,13 +1,13 @@
 package com.salesianostriana.dam.TrailQuest_Api.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
-@Table(name = "poi_entity")
+@Table(name = "pois")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -21,16 +21,17 @@ public class Poi {
     @JoinColumn(name = "route_id", nullable = false)
     private Route route;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String name;
 
+    @NotNull
     @Column(nullable = false)
-    private Double latitude;
+    private Double lat;
 
+    @NotNull
     @Column(nullable = false)
-    private Double longitude;
+    private Double lon;
 
-    @Column(name = "photo_field", length = 500)
     private String photoField;
 
 }
