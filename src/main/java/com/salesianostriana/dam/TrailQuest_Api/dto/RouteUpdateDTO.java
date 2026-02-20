@@ -24,4 +24,14 @@ public record RouteUpdateDTO(
         if (this.difficulty() != null) route.setDifficulty(this.difficulty());
         if (this.coverFileId() != null) route.setCoverFileId(this.coverFileId());
     }
+
+    public Route toEntity() {
+        Route route = new Route();
+        route.setTitle((this.title()));
+        route.setRegion(PosiblesRegiones.valueOf((this.region())));
+        route.setDistanceKm((this.distanceKm()));
+        route.setDifficulty((this.difficulty()));
+        route.setCoverFileId((this.coverFileId()));
+        return route;
+    }
 }
