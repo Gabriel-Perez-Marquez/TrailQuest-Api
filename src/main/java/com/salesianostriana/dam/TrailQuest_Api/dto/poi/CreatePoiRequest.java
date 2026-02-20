@@ -1,12 +1,13 @@
 package com.salesianostriana.dam.TrailQuest_Api.dto.poi;
 
 import com.salesianostriana.dam.TrailQuest_Api.model.Poi;
+import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import com.salesianostriana.dam.TrailQuest_Api.validation.ValidCoordinates;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @ValidCoordinates
-public record CreatePOIRequest(
+public record CreatePoiRequest(
         @NotBlank(message = "El nombre del punto de interés es obligatorio")
         String name,
 
