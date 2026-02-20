@@ -3,6 +3,8 @@ package com.salesianostriana.dam.TrailQuest_Api.security.auth;
 
 import com.salesianostriana.dam.TrailQuest_Api.dto.auth.AuthResponse;
 import com.salesianostriana.dam.TrailQuest_Api.dto.auth.LoginRequest;
+import com.salesianostriana.dam.TrailQuest_Api.dto.auth.RegisterRequest;
+import com.salesianostriana.dam.TrailQuest_Api.dto.auth.RegisterResponse;
 import com.salesianostriana.dam.TrailQuest_Api.model.User;
 import com.salesianostriana.dam.TrailQuest_Api.repository.UserRepository;
 import com.salesianostriana.dam.TrailQuest_Api.security.jwt.JwtAccessTokenService;
@@ -36,6 +38,11 @@ public class AuthService {
 
         return new AuthResponse(loginRequest.username(), token);
 
+    }
+
+
+    public RegisterResponse doRegister(RegisterRequest registerRequest){
+        
     }
 
 }
