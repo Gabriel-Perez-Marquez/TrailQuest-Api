@@ -12,19 +12,19 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.salesianostriana.dam.TrailQuest_Api.service.RouteService;
+import com.salesianostriana.dam.TrailQuest_Api.service.RouteServiceImpl;
 
 @RestController
 @RequestMapping("/api/routes")
 @RequiredArgsConstructor
 public class RouteController {
 
-    private final RouteService routeService;
+    private final RouteServiceImpl routeService;
 
     @PostMapping
     public ResponseEntity<RouteResponseDTO> createRoute(@Valid @RequestBody RouteCreateDTO createDTO) {
         RouteResponseDTO createdRoute = routeService.createRoute(createDTO);
-        return new ResponseEntity<>(createdRoute, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdRoute);
     }
 
     @PutMapping("/{id}")
