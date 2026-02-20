@@ -32,6 +32,6 @@ public class Poi {
     @Column(nullable = false)
     private Double lon;
 
-    private String photoField;
+    private String photoFileId;
 
 }
