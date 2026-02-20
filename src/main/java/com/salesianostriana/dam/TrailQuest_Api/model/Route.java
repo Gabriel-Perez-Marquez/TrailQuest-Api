@@ -31,7 +31,8 @@ public class Route {
     private Double distanceKm;
 
     @Column(nullable = false)
-    private String difficulty;
+    @Enumerated(EnumType.STRING)
+    private RouteDifficulty difficulty;
 
     @Column(nullable = false)
     private UUID creatorId;
