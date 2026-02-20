@@ -1,5 +1,7 @@
 package com.salesianostriana.dam.TrailQuest_Api.dto;
 
+import com.salesianostriana.dam.TrailQuest_Api.model.PosiblesRegiones;
+import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import jakarta.validation.constraints.*;
 import java.util.UUID;
 
@@ -15,4 +17,11 @@ public record RouteUpdateDTO(
         String difficulty,
 
         UUID coverFileId
-) {}
+) {
+    public void updateEntity(Route route) {
+        if (this.title() != null) route.setTitle(this.title());
+        if (this.region() != null) route.setRegion(PosiblesRegiones.valueOf(this.region()));
+        if (this.difficulty() != null) route.setDifficulty(this.difficulty());
+        if (this.coverFileId() != null) route.setCoverFileId(this.coverFileId());
+    }
+}
