@@ -5,6 +5,7 @@ import com.salesianostriana.dam.TrailQuest_Api.dto.RouteFilterDTO;
 import com.salesianostriana.dam.TrailQuest_Api.dto.RouteResponseDTO;
 import com.salesianostriana.dam.TrailQuest_Api.dto.RouteUpdateDTO;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,13 +16,10 @@ import com.salesianostriana.dam.TrailQuest_Api.service.RouteService;
 
 @RestController
 @RequestMapping("/api/routes")
+@RequiredArgsConstructor
 public class RouteController {
 
     private final RouteService routeService;
-
-    public RouteController(RouteService routeService) {
-        this.routeService = routeService;
-    }
 
     @PostMapping
     public ResponseEntity<RouteResponseDTO> createRoute(@Valid @RequestBody RouteCreateDTO createDTO) {

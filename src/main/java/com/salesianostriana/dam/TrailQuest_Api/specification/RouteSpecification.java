@@ -22,9 +22,10 @@ public class RouteSpecification {
             }
 
             if (filterDTO.regions() != null && !filterDTO.regions().isEmpty()) {
-                List<PosiblesRegiones> regionEnums = filterDTO.regions().stream()
-                        .map(PosiblesRegiones::valueOf)
-                        .toList();
+                List<PosiblesRegiones> regionEnums = new ArrayList<>();
+                for (String region : filterDTO.regions()) {
+                    regionEnums.add(PosiblesRegiones.valueOf(region));
+                }
                 predicates.add(root.get("region").in(regionEnums));
             }
 
