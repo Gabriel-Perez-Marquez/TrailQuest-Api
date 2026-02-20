@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.TrailQuest_Api.dto.auth.poi;
+package com.salesianostriana.dam.TrailQuest_Api.dto.poi;
 
 import com.salesianostriana.dam.TrailQuest_Api.validation.ValidCoordinates;
 import jakarta.validation.constraints.NotBlank;

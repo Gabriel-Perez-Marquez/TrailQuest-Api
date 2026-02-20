@@ -1,6 +1,6 @@
 package com.salesianostriana.dam.TrailQuest_Api.validation;
 
-import com.salesianostriana.dam.TrailQuest_Api.dto.auth.poi.CreatePOIRequest;
+import com.salesianostriana.dam.TrailQuest_Api.dto.poi.CreatePOIRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
