@@ -64,17 +64,10 @@ public class RouteServiceImpl {
     }
 
     public Page<RouteResponseDTO> filterRoutes(RouteFilterDTO filterDTO, Pageable pageable) {
-        if (filterDTO.sortBy() != null && !filterDTO.sortBy().isEmpty()) {
-            Sort.Direction direction = "desc".equalsIgnoreCase(filterDTO.sortDirection())
-                    ? Sort.Direction.DESC : Sort.Direction.ASC;
-            pageable = PageRequest.of(
-                    pageable.getPageNumber(),
-                    pageable.getPageSize(),
-                    Sort.by(direction, filterDTO.sortBy())
-            );
-        }
-
-        return routeRepository.findAll(RouteSpecification.filterBy(filterDTO), pageable)
+        return routeRepository.findAll(
+                        RouteSpecification.filterBy(filterDTO),
+                        pageable
+                )
                 .map(RouteResponseDTO::of);
     }
 }
