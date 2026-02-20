@@ -1,9 +1,8 @@
 package com.salesianostriana.dam.TrailQuest_Api.dto;
 
-import com.salesianostriana.dam.TrailQuest_Api.model.PosiblesRegiones;
+import com.salesianostriana.dam.TrailQuest_Api.model.RouteRegions;
 import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import com.salesianostriana.dam.TrailQuest_Api.model.RouteDifficulty;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
@@ -32,7 +31,7 @@ public record RouteResponseDTO(
         Route route = new Route();
         route.setId((this.id()));
         route.setTitle((this.title()));
-        route.setRegion(PosiblesRegiones.valueOf((this.region())));
+        route.setRegion(RouteRegions.valueOf((this.region())));
         route.setDistanceKm((this.distanceKm()));
         route.setDifficulty(RouteDifficulty.valueOf((this.difficulty())));
         route.setCreatorId((this.creatorId()));

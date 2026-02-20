@@ -25,7 +25,7 @@ public class Route {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PosiblesRegiones region;
+    private RouteRegions region;
 
     @Column(nullable = false)
     private Double distanceKm;
