@@ -31,7 +31,7 @@ public record RouteUpdateDTO(
         route.setTitle((this.title()));
         route.setRegion(RouteRegions.valueOf((this.region())));
         route.setDistanceKm((this.distanceKm()));
-        route.setDifficulty((this.difficulty()));
+        route.setDifficulty(RouteDifficulty.valueOf((this.difficulty())));
         route.setCoverFileId((this.coverFileId()));
         return route;
     }
