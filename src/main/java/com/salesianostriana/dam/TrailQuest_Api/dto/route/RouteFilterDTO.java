@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.TrailQuest_Api.dto;
+package com.salesianostriana.dam.TrailQuest_Api.dto.route;
 
 import java.util.List;
 
