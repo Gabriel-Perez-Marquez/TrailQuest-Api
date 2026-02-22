@@ -1,9 +1,9 @@
 package com.salesianostriana.dam.TrailQuest_Api.controller;
 
-import com.salesianostriana.dam.TrailQuest_Api.dto.RouteCreateDTO;
-import com.salesianostriana.dam.TrailQuest_Api.dto.RouteFilterDTO;
-import com.salesianostriana.dam.TrailQuest_Api.dto.RouteResponseDTO;
-import com.salesianostriana.dam.TrailQuest_Api.dto.RouteUpdateDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.route.RouteCreateDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.route.RouteFilterDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.route.RouteResponseDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.route.RouteUpdateDTO;
 import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import com.salesianostriana.dam.TrailQuest_Api.service.RouteService;
 import com.salesianostriana.dam.TrailQuest_Api.specification.RouteSpecification;

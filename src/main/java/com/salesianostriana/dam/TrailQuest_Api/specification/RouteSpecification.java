@@ -1,6 +1,6 @@
 package com.salesianostriana.dam.TrailQuest_Api.specification;
 
-import com.salesianostriana.dam.TrailQuest_Api.dto.RouteFilterDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.route.RouteFilterDTO;
 import com.salesianostriana.dam.TrailQuest_Api.model.PosiblesRegiones;
 import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import org.springframework.data.jpa.domain.Specification;

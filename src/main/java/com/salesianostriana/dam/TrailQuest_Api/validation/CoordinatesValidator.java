@@ -1,14 +1,14 @@
 package com.salesianostriana.dam.TrailQuest_Api.validation;
 
-import com.salesianostriana.dam.TrailQuest_Api.dto.poi.CreatePOIRequest;
+import com.salesianostriana.dam.TrailQuest_Api.dto.poi.CreatePoiRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class CoordinatesValidator implements ConstraintValidator<ValidCoordinates, CreatePOIRequest> {
+public class CoordinatesValidator implements ConstraintValidator<ValidCoordinates, CreatePoiRequest> {
 
 
     @Override
-    public boolean isValid(CreatePOIRequest request, ConstraintValidatorContext context) {
+    public boolean isValid(CreatePoiRequest request, ConstraintValidatorContext context) {
         if (request == null){
             return true;
         }

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @ValidCoordinates
-public record CreatePOIRequest(
+public record CreatePoiRequest(
         @NotBlank(message = "El nombre del punto de interés es obligatorio")
         String name,
 
