@@ -61,5 +61,4 @@ public class Poi {
 
     @ElementCollection
     private List<String> features;
-
 }
