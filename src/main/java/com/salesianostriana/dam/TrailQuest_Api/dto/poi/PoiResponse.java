@@ -6,7 +6,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record POIResponse(
+public record PoiResponse(
         @NotNull(message = "El ID no puede ser nulo")
         Long id,
 
@@ -26,8 +26,8 @@ public record POIResponse(
         @NotNull(message = "El ID de la ruta es obligatorio")
         Long routeId
 ) {
-    public static POIResponse of(Poi poi) {
-        return new POIResponse(
+    public static PoiResponse of(Poi poi) {
+        return new PoiResponse(
                 poi.getId(),
                 poi.getName(),
                 poi.getLat(),
