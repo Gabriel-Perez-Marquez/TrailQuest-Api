@@ -31,6 +31,7 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    // private final JwtAuthenticationFilter jwtAuthenticationFilter; Comentado hasta que carmen termine el JwtAuthenticationFilter
 
     //Esto peta porquye se neceista el UserDetailsService y la clase de PasswordEncoderConfig
 
