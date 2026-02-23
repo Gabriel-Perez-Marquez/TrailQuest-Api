@@ -18,7 +18,7 @@ public class Route {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private String id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
