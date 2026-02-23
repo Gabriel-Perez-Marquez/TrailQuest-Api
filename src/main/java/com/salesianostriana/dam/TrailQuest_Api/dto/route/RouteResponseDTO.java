@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.TrailQuest_Api.dto;
+package com.salesianostriana.dam.TrailQuest_Api.dto.route;
 
 import com.salesianostriana.dam.TrailQuest_Api.model.RouteRegions;
 import com.salesianostriana.dam.TrailQuest_Api.model.Route;
