@@ -6,6 +6,7 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
+@Table(name = "routes")
 @Getter
 @Setter
 @NoArgsConstructor
