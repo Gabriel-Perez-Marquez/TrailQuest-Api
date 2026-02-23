@@ -3,6 +3,7 @@ package com.salesianostriana.dam.TrailQuest_Api.dto;
 import com.salesianostriana.dam.TrailQuest_Api.model.RouteRegions;
 import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import com.salesianostriana.dam.TrailQuest_Api.model.RouteDifficulty;
+import com.salesianostriana.dam.TrailQuest_Api.validation.ValidDistance;
 import jakarta.validation.constraints.*;
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ public record RouteUpdateDTO(
 
         String region,
 
-        @Positive(message = "La distancia debe ser positiva")
+        @ValidDistance(message = "La distancia debe ser mayor a 0.1 km (100 metros)")
         Double distanceKm,
 
         String difficulty,

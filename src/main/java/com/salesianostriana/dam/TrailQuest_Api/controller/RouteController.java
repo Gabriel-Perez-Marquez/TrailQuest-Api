@@ -4,7 +4,11 @@ import com.salesianostriana.dam.TrailQuest_Api.dto.RouteCreateDTO;
 import com.salesianostriana.dam.TrailQuest_Api.dto.RouteFilterDTO;
 import com.salesianostriana.dam.TrailQuest_Api.dto.RouteResponseDTO;
 import com.salesianostriana.dam.TrailQuest_Api.dto.RouteUpdateDTO;
+import com.salesianostriana.dam.TrailQuest_Api.dto.UploadResponse;
+import com.salesianostriana.dam.TrailQuest_Api.model.FileMetadata;
 import com.salesianostriana.dam.TrailQuest_Api.model.Route;
+import com.salesianostriana.dam.TrailQuest_Api.service.RouteService;
+import com.salesianostriana.dam.TrailQuest_Api.service.StorageService;
 import com.salesianostriana.dam.TrailQuest_Api.specification.RouteSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +17,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
-import com.salesianostriana.dam.TrailQuest_Api.service.RouteService;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/routes")
@@ -23,6 +29,7 @@ import com.salesianostriana.dam.TrailQuest_Api.service.RouteService;
 public class RouteController {
 
     private final RouteService routeService;
+    private final StorageService storageService;
 
     @PostMapping
     public ResponseEntity<RouteResponseDTO> createRoute(@Valid @RequestBody RouteCreateDTO createDTO) {
@@ -67,5 +74,24 @@ public class RouteController {
                 .map(RouteResponseDTO::of);
 
         return ResponseEntity.ok(routes);
+    }
+
+    @PostMapping("/upload-cover")
+    public ResponseEntity<UploadResponse> uploadCoverImage(
+            @RequestParam("file") MultipartFile file) {
+
+        FileMetadata metadata = storageService.store(file);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(UploadResponse.of(metadata.getId(), metadata.getFilename()));
+    }
+
+    @GetMapping("/images/{fileName:.+}")
+    public ResponseEntity<Resource> getImage(@PathVariable String fileName) {
+        Resource resource = storageService.loadAsResource(fileName);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(resource);
     }
 }

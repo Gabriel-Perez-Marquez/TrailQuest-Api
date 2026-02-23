@@ -10,6 +10,6 @@ public class DistanceValidator implements ConstraintValidator<ValidDistance, Dou
         if (distance == null) {
             return false;
         }
-        return distance > 0.1;
+        return distance > 0.0;
     }
 }
