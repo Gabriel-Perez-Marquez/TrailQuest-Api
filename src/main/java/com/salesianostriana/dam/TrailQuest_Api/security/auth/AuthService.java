@@ -5,8 +5,9 @@ import com.salesianostriana.dam.TrailQuest_Api.dto.auth.AuthResponse;
 import com.salesianostriana.dam.TrailQuest_Api.dto.auth.LoginRequest;
 import com.salesianostriana.dam.TrailQuest_Api.dto.auth.RegisterRequest;
 import com.salesianostriana.dam.TrailQuest_Api.dto.auth.RegisterResponse;
-import com.salesianostriana.dam.TrailQuest_Api.exception.UsernameAlredyInUse;
+import com.salesianostriana.dam.TrailQuest_Api.exception.UsernameAlredyInUseException;
 import com.salesianostriana.dam.TrailQuest_Api.model.User;
+import com.salesianostriana.dam.TrailQuest_Api.model.UserRole;
 import com.salesianostriana.dam.TrailQuest_Api.repository.UserRepository;
 import com.salesianostriana.dam.TrailQuest_Api.security.jwt.JwtAccessTokenService;
 import lombok.RequiredArgsConstructor;
@@ -48,20 +49,19 @@ public class AuthService {
 
     public RegisterResponse doRegister(RegisterRequest registerRequest){
         if (userRepository.existsByUsername(registerRequest.username())) {
-            throw new UsernameAlredyInUse("El nombre de usuario ya está en uso");
+            throw new UsernameAlredyInUseException("El nombre de usuario ya está en uso");
         }
 
         User user = userRepository.save(User.builder()
                 .username(registerRequest.username())
                 .password(passwordEncoder.encode(registerRequest.password()))
                 .email(registerRequest.email())
-                .roles(Set.of(registerRequest.userRole()))
+                .roles(Set.of(UserRole.USER))
                 .build());
 
         return new RegisterResponse(
                 user.getId(),
                 user.getUsername(),
-                user.getPassword(),
                 user.getEmail(),
                 user.getRoles()
         );
