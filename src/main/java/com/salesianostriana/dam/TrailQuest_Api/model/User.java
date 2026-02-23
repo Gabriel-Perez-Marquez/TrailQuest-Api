@@ -45,6 +45,7 @@ public class User implements UserDetails {
     @NotEmpty(message = "El usuario debe tener al menos un rol")
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     private Set<UserRole> roles = new HashSet<>();
 
 
