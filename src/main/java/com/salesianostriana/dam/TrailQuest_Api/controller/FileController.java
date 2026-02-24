@@ -16,7 +16,6 @@ import com.salesianostriana.dam.TrailQuest_Api.utils.MimeTypeDetector;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/files")
 @RequiredArgsConstructor
 public class FileController {
 

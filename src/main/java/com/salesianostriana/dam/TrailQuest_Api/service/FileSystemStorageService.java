@@ -26,11 +26,11 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 @ConditionalOnProperty(name = "storage.type", havingValue = "local", matchIfMissing = true)
-public class FileService implements StorageService {
+public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
 
-    public FileService(@Value("${storage.location:uploads}") String storageLocation) {
+    public FileSystemStorageService(@Value("${storage.location:uploads}") String storageLocation) {
         if (storageLocation.trim().isEmpty()) {
             throw new StorageException("La ubicación de subida no puede estar vacía.");
         }

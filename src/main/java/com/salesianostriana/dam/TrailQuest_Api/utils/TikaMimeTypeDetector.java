@@ -20,8 +20,4 @@ public class TikaMimeTypeDetector implements MimeTypeDetector {
         }
     }
 
-    @Override
-    public String getMimeType(String filename) {
-        return tika.detect(filename);
-    }
 }
