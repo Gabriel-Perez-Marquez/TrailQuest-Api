@@ -27,7 +27,7 @@ public class JwtAccessTokenService {
     @Value("${jwt.duration}")
     private long jwtLifeInSeconds;
 
-    JwtParser jwtParser;
+    private JwtParser jwtParser;
 
     private SecretKey secretKey;
 
