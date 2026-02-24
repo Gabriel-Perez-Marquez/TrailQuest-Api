@@ -13,7 +13,7 @@ public record RouteResponseDTO(
         Double distanceKm,
         String difficulty,
         UUID creatorId,
-        UUID coverFileId
+        String  coverFileId
 ) {
 
     public static RouteResponseDTO of(Route route) {

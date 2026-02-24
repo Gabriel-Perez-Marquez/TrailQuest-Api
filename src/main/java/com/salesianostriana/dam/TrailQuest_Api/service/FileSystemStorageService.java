@@ -1,7 +1,5 @@
 package com.salesianostriana.dam.TrailQuest_Api.service;
 
-
-import com.salesianostriana.dam.TrailQuest_Api.exception.InvalidFileTypeException;
 import com.salesianostriana.dam.TrailQuest_Api.exception.StorageException;
 import com.salesianostriana.dam.TrailQuest_Api.model.FileMetadata;
 import com.salesianostriana.dam.TrailQuest_Api.model.LocalFileMetadataImpl;
@@ -14,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -28,89 +26,115 @@ import java.nio.file.StandardCopyOption;
 @ConditionalOnProperty(name = "storage.type", havingValue = "local", matchIfMissing = true)
 public class FileSystemStorageService implements StorageService {
 
-    private final Path rootLocation;
+    @Value("${storage.location}")
+    private String storageLocation;
 
-    public FileSystemStorageService(@Value("${storage.location:uploads}") String storageLocation) {
-        if (storageLocation.trim().isEmpty()) {
-            throw new StorageException("La ubicación de subida no puede estar vacía.");
-        }
-        this.rootLocation = Paths.get(storageLocation);
-    }
+    private Path rootLocation;
+
 
     @PostConstruct
     @Override
     public void init() {
+        rootLocation = Paths.get(storageLocation);
         try {
             Files.createDirectories(rootLocation);
         } catch (IOException e) {
-            throw new StorageException("No se pudo inicializar el almacenamiento", e);
+            throw new StorageException("Could not initialize storage location", e);
         }
+
     }
 
     @Override
-    public FileMetadata store(MultipartFile file) {
+    public FileMetadata store(MultipartFile file)  {
         try {
-            if (file.isEmpty()) {
-                throw new StorageException("Fallo al almacenar un archivo vacío.");
-            }
-
             String contentType = file.getContentType();
             if (contentType == null || !contentType.startsWith("image/")) {
-                throw new InvalidFileTypeException("El archivo debe ser una imagen válida.");
+                throw new com.salesianostriana.dam.TrailQuest_Api.exception.InvalidFileTypeException(
+                        "El archivo debe ser una imagen válida."
+                );
             }
 
-            String filename = StringUtils.cleanPath(file.getOriginalFilename());
-
-            String uniqueFilename = System.currentTimeMillis() + "_" + filename;
-
-            Path destinationFile = this.rootLocation.resolve(Paths.get(uniqueFilename))
-                    .normalize().toAbsolutePath();
-
-            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
-                throw new StorageException("No se puede almacenar un archivo fuera del directorio actual.");
-            }
-
-            try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
-            }
-
-            String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
-
-            return LocalFileMetadataImpl.of(uniqueFilename, baseUrl);
-
-        } catch (IOException e) {
-            throw new StorageException("Fallo al almacenar el archivo.", e);
+            String filename =  store(file.getBytes(), file.getOriginalFilename(), file.getContentType());
+            return LocalFileMetadataImpl.of(filename);
+        } catch (Exception ex) {
+            throw new StorageException("Error storing file: " + file.getOriginalFilename(), ex);
         }
     }
 
     @Override
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String id) {
         try {
-            Path file = rootLocation.resolve(filename);
-            Resource resource = new UrlResource(file.toUri());
+            Path file = load(id);
+            UrlResource resource =
+                    new UrlResource(file.toUri());
 
-            if (resource.exists() || resource.isReadable()) {
+            if (resource.exists() && resource.isReadable()) {
                 return resource;
             } else {
-                throw new StorageException("No se pudo leer el archivo: " + filename);
+                throw new StorageException("Could not read file: " + id);
             }
-        } catch (MalformedURLException e) {
-            throw new StorageException("No se pudo leer el archivo: " + filename, e);
+
+        } catch (MalformedURLException ex) {
+            throw new StorageException("Could not read file: " + id);
         }
     }
 
     @Override
     public void deleteFile(String filename) {
         try {
-            Files.deleteIfExists(this.rootLocation.resolve(filename));
+            Files.delete(load(filename));
         } catch (IOException e) {
-            throw new StorageException("No se pudo eliminar el archivo: " + filename, e);
+            throw new StorageException("Could not delete file:" + filename);
         }
     }
 
-    @Override
+    private String store(byte[] file, String filename, String contentType) throws Exception {
+
+        // Limpiamos el nombre del fichero
+        String newFilename = StringUtils.cleanPath(filename);
+
+        if (file.length == 0)
+            throw new StorageException("The file is empty");
+
+        newFilename = calculateNewFilename(newFilename);
+
+        try (InputStream inputStream = new ByteArrayInputStream(file)) {
+            Files.copy(inputStream, rootLocation.resolve(newFilename),
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+        } catch(IOException ex) {
+            throw new StorageException("Error storing file: " + newFilename, ex);
+        }
+
+        return newFilename;
+    }
+
+    private String calculateNewFilename(String filename) {
+        String newFilename = filename;
+
+        while(Files.exists(rootLocation.resolve(newFilename))) {
+            // Tratamos de generar un nuevo
+            String extension = StringUtils.getFilenameExtension(newFilename);
+            String name = newFilename.replace("." + extension, "");
+
+            String suffix = Long.toString(System.currentTimeMillis());
+            suffix = suffix.substring(suffix.length()-6);
+
+            newFilename = name + "_" + suffix + "." + extension;
+
+        }
+        return newFilename;
+    }
+
+    private Path load(String filename) {
+        return rootLocation.resolve(filename);
+    }
+
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
+        try {
+            FileSystemUtils.deleteRecursively(rootLocation);
+        } catch (IOException e) {
+            throw new StorageException("Could not delete all");
+        }
     }
 }
-

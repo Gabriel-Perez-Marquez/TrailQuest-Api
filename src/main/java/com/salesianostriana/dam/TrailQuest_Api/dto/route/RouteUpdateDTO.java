@@ -18,7 +18,7 @@ public record RouteUpdateDTO(
 
         String difficulty,
 
-        UUID coverFileId
+        String  coverFileId
 ) {
     public void updateEntity(Route route) {
         if (this.title() != null) route.setTitle(this.title());

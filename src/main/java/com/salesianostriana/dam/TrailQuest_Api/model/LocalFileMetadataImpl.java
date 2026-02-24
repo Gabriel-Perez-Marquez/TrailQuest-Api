@@ -9,15 +9,7 @@ public class LocalFileMetadataImpl extends AbstractFileMetadata {
         return LocalFileMetadataImpl.builder()
                 .id(filename)
                 .filename(filename)
-                .URL("/api/files/" + filename)
                 .build();
     }
 
-    public static FileMetadata of(String filename, String baseUrl) {
-        return LocalFileMetadataImpl.builder()
-                .id(filename)
-                .filename(filename)
-                .URL(baseUrl + "/api/files/" + filename)
-                .build();
-    }
 }

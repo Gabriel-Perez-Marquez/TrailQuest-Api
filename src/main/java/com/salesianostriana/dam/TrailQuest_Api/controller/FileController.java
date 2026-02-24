@@ -3,17 +3,19 @@ package com.salesianostriana.dam.TrailQuest_Api.controller;
 import com.salesianostriana.dam.TrailQuest_Api.dto.FileResponse;
 import com.salesianostriana.dam.TrailQuest_Api.model.FileMetadata;
 import com.salesianostriana.dam.TrailQuest_Api.service.StorageService;
+import com.salesianostriana.dam.TrailQuest_Api.utils.MimeTypeDetector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.salesianostriana.dam.TrailQuest_Api.utils.MimeTypeDetector;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,34 +24,70 @@ public class FileController {
     private final StorageService storageService;
     private final MimeTypeDetector mimeTypeDetector;
 
+
+
+    @PostMapping("/upload/files")
+    public ResponseEntity<?> upload(@RequestPart("files") MultipartFile[] files) {
+
+
+        List<FileResponse> result = Arrays.stream(files)
+                .map(this::uploadFile)
+                .toList();
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(result);
+    }
+
+
     @PostMapping("/upload")
-    public ResponseEntity<FileResponse> upload(@RequestPart("file") MultipartFile file) {
-        FileMetadata metadata = storageService.store(file);
+    public ResponseEntity<?> upload(@RequestPart("file") MultipartFile file) {
+
+        FileResponse response = uploadFile(file);
+
+        return ResponseEntity.created(URI.create(response.uri())).body(response);
+    }
+
+    private FileResponse uploadFile(MultipartFile multipartFile) {
+        FileMetadata fileMetadata = storageService.store(multipartFile);
 
         String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/files/")
-                .path(metadata.getId())
+                .path("/download/")
+                .path(fileMetadata.getId())
                 .toUriString();
 
-        return ResponseEntity.created(URI.create(uri)).body(
-                FileResponse.of(metadata, file, uri)
-        );
+        fileMetadata.setURL(uri);
+
+        return FileResponse.builder()
+                .id(fileMetadata.getId())
+                .name(fileMetadata.getFilename())
+                .size(multipartFile.getSize())
+                .type(multipartFile.getContentType())
+                .uri(uri)
+                .build();
     }
 
-    @GetMapping("/{id:.+}")
-    public ResponseEntity<Resource> serveFile(@PathVariable String id) {
+
+    @GetMapping("/download/{id:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String id) {
         Resource resource = storageService.loadAsResource(id);
+
         String mimeType = mimeTypeDetector.getMimeType(resource);
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, mimeType)
-                .body(resource);
+        ResponseEntity.BodyBuilder builder = ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, mimeType);
+
+        try {
+            long len = resource.contentLength();
+            if (len >= 0) {
+                builder.header(HttpHeaders.CONTENT_LENGTH, Long.toString(len));
+            }
+        } catch (Exception ignored) {
+
+        }
+
+        return builder.body(resource);
+
     }
 
-
-    @DeleteMapping("/{filename:.+}")
-    public ResponseEntity<Void> deleteFile(@PathVariable String filename) {
-        storageService.deleteFile(filename);
-        return ResponseEntity.noContent().build();
-    }
 }

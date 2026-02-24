@@ -39,7 +39,7 @@ public class Route {
     private UUID creatorId;
 
     @Column(nullable = false)
-    private UUID coverFileId;
+    private String coverFileId;
 
 
 

@@ -26,7 +26,7 @@ public record RouteCreateDTO(
         UUID creatorId,
 
         @NotNull(message = "El ID de la imagen es obligatorio")
-        UUID coverFileId
+        String coverFileId
 
 
 ) {
