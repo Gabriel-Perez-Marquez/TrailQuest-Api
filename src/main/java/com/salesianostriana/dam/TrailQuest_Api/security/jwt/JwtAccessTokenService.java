@@ -2,6 +2,7 @@ package com.salesianostriana.dam.TrailQuest_Api.security.jwt;
 
 
 import com.salesianostriana.dam.TrailQuest_Api.model.User;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -60,7 +61,17 @@ public class JwtAccessTokenService {
                 .compact();
     }
 
+    public boolean validateAccessToken(String token) throws JwtException {
+        jwtParser.parseSignedClaims(token);
+        return true;
+    }
 
+    public String getUserIdFromAccessToken(String token) {
+        return jwtParser
+                .parseSignedClaims(token)
+                .getBody()
+                .getSubject();
+    }
 
 
 }
