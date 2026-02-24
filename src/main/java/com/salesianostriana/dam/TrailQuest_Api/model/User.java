@@ -35,7 +35,7 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @NotBlank(message = "{user.password.notblank }")
+    @NotBlank(message = "{user.password.notblank}")
     @Size(min = 8, message = "{user.password.size}")
     @StrongPassword
     private String password;
