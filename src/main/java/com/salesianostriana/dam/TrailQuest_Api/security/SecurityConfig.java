@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/pois/route/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pois/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/pois/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/routes").permitAll()
                         .anyRequest().authenticated()
                 );
 

@@ -28,6 +28,12 @@ public class Route {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = true)
+    private Double startLat;
+
+    @Column(nullable = true)
+    private Double startLon;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RouteRegions region;
@@ -51,6 +57,10 @@ public class Route {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "route_path_points", joinColumns = @JoinColumn(name = "route_id"))
     private List<LatLng> pathPoints = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Poi> pois = new ArrayList<>();
 
     @Override
     public final boolean equals(Object o) {
