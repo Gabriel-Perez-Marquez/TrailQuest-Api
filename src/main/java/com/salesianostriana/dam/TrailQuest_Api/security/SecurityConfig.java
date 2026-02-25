@@ -70,13 +70,13 @@ public class SecurityConfig {
                         excepz
                                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                                 .accessDeniedHandler(jwtAccessDeniedHandler)
-                );
+                )
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout") // URL que escuchará Spring
                         .logoutSuccessHandler((request, response, authentication) -> {
                             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                         })
-                )
+                );
                 http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/h2-console/**", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pois/route/**").permitAll()
