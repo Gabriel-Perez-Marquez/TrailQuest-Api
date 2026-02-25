@@ -2,9 +2,11 @@ package com.salesianostriana.dam.TrailQuest_Api.dto.route;
 import com.salesianostriana.dam.TrailQuest_Api.model.RouteRegions;
 import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import com.salesianostriana.dam.TrailQuest_Api.model.RouteDifficulty;
+import com.salesianostriana.dam.TrailQuest_Api.model.LatLng;
 import com.salesianostriana.dam.TrailQuest_Api.validation.ValidDistance;
 import jakarta.validation.constraints.*;
 import java.util.UUID;
+import java.util.List;
 
 public record RouteCreateDTO(
 
@@ -26,8 +28,15 @@ public record RouteCreateDTO(
         UUID creatorId,
 
         @NotNull(message = "El ID de la imagen es obligatorio")
-        String coverFileId
+        String coverFileId,
 
+        @NotNull(message = "La elevación es obligatoria")
+        @Min(value = 0, message = "La elevación no puede ser negativa")
+        Integer elevation,
+
+        @NotNull(message = "Los puntos de la ruta son obligatorios")
+        @NotEmpty(message = "La lista de puntos de ruta no puede estar vacía")
+        List<LatLng> pathPoints
 
 ) {
     public Route toEntity() {
@@ -38,6 +47,8 @@ public record RouteCreateDTO(
         route.setDifficulty(RouteDifficulty.valueOf((this.difficulty())));
         route.setCreatorId((this.creatorId()));
         route.setCoverFileId((this.coverFileId()));
+        route.setElevation((this.elevation()));
+        route.setPathPoints((this.pathPoints()));
     return route;
     }
 }
