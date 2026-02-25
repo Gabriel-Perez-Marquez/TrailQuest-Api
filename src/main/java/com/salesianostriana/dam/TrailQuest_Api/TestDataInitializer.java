@@ -25,7 +25,7 @@ public class TestDataInitializer implements CommandLineRunner {
 
             Route r1 = Route.builder()
                     .title("Ruta del Cares")
-                    .region(RouteRegions.ESPANYA)
+                    .region(RouteRegions.ASTURIAS)
                     .difficulty(RouteDifficulty.MEDIA)
                     .distanceKm(11.5)
                     .elevation(450)
@@ -59,7 +59,7 @@ public class TestDataInitializer implements CommandLineRunner {
 
             Route r2 = Route.builder()
                     .title("Caminito del Rey")
-                    .region(RouteRegions.ESPANYA)
+                    .region(RouteRegions.ANDALUCIA)
                     .difficulty(RouteDifficulty.DIFICIL)
                     .distanceKm(7.7)
                     .elevation(215)
