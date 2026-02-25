@@ -5,6 +5,7 @@ import com.salesianostriana.dam.TrailQuest_Api.dto.auth.AuthResponse;
 import com.salesianostriana.dam.TrailQuest_Api.dto.auth.LoginRequest;
 import com.salesianostriana.dam.TrailQuest_Api.dto.auth.RegisterRequest;
 import com.salesianostriana.dam.TrailQuest_Api.dto.auth.RegisterResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,14 +23,14 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> doLogin(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> doLogin(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.status(201)
                 .body(authService.doLogin(loginRequest));
 
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> doRegister(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<RegisterResponse> doRegister(@Valid @RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.status(201)
                 .body(authService.doRegister(registerRequest));
     }
