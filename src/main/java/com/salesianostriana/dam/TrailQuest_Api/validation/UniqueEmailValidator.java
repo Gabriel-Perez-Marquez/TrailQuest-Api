@@ -12,7 +12,10 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
     private UserRepository repo;
 
     @Override
-    public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return StringUtils.hasText(s) && !repo.existsByEmail(s);
+    public boolean isValid(String email, ConstraintValidatorContext context) {
+        if (repo == null) {
+            return true;
+        }
+        return email != null && !repo.existsByEmail(email);
     }
 }
