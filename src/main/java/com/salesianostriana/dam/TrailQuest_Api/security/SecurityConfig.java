@@ -5,6 +5,7 @@ import com.salesianostriana.dam.TrailQuest_Api.model.UserRole;
 import com.salesianostriana.dam.TrailQuest_Api.repository.UserRepository;
 import com.salesianostriana.dam.TrailQuest_Api.security.jwt.JwtAuthenticationFilter;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -62,7 +63,12 @@ public class SecurityConfig {
                     source.registerCorsConfiguration("/**", configuration);
                     corsConf.configurationSource(source);
                 })
-
+                .logout(logout -> logout
+                        .logoutUrl("/auth/logout") // URL que escuchará Spring
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                        })
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/h2-console/**", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pois/route/**").permitAll()
