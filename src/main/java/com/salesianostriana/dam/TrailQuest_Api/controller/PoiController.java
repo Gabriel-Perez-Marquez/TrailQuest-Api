@@ -7,6 +7,7 @@ import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import com.salesianostriana.dam.TrailQuest_Api.model.User;
 import com.salesianostriana.dam.TrailQuest_Api.service.PoiService;
 import com.salesianostriana.dam.TrailQuest_Api.service.RouteService;
+import com.salesianostriana.dam.TrailQuest_Api.service.StorageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ public class PoiController {
 
     private final PoiService poiService;
     private final RouteService routeService;
+    private final StorageService storageService;
 
     @GetMapping("/route/{routeId}")
     public ResponseEntity<Page<PoiResponse>> findAllByRoute(
@@ -66,17 +68,17 @@ public class PoiController {
     @PostMapping("/{id}/photo")
     public ResponseEntity<PoiResponse> uploadPoiPhoto(
             @PathVariable Long id,
-            @RequestPart("file")MultipartFile file,
+            @RequestPart("file") MultipartFile file,
             @AuthenticationPrincipal User currentUser
     ) {
         String contentType = file.getContentType();
+        List<String> allowedTypes = List.of("image/jpeg", "image/png", "image/gif", "image/webp");
 
-        if (contentType == null || !List.of("image/jpeg", "image/png", "image/gif").contains(contentType)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Solo se permiten imagenes (JPEG, PNG, GIF)");
+        if (contentType == null || !allowedTypes.contains(contentType)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Solo se permiten imágenes (JPG, PNG, GIF, WEBP)");
         }
 
-        // String photoFileId = storageService.store(file);
-        String photoFileId = "simulated-id-123";
+        String photoFileId = storageService.store(file).getFilename();
         Poi updated = poiService.updatePhoto(id, photoFileId, currentUser);
 
         return ResponseEntity.ok(PoiResponse.of(updated));
