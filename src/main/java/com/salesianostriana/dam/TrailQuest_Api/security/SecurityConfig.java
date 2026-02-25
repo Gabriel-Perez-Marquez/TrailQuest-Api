@@ -3,6 +3,8 @@ package com.salesianostriana.dam.TrailQuest_Api.security;
 import com.salesianostriana.dam.TrailQuest_Api.model.User;
 import com.salesianostriana.dam.TrailQuest_Api.model.UserRole;
 import com.salesianostriana.dam.TrailQuest_Api.repository.UserRepository;
+import com.salesianostriana.dam.TrailQuest_Api.security.error.JwtAccessDeniedHandler;
+import com.salesianostriana.dam.TrailQuest_Api.security.error.JwtAuthenticationEntryPoint;
 import com.salesianostriana.dam.TrailQuest_Api.security.jwt.JwtAuthenticationFilter;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +39,8 @@ public class SecurityConfig {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -62,8 +65,14 @@ public class SecurityConfig {
                     source.registerCorsConfiguration("/**", configuration);
                     corsConf.configurationSource(source);
                 })
+                .exceptionHandling(excepz ->
+                        excepz
+                                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                                .accessDeniedHandler(jwtAccessDeniedHandler)
+                );
 
-                .authorizeHttpRequests(auth -> auth
+
+                http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/h2-console/**", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pois/route/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pois/**").hasAnyRole("USER", "ADMIN")
@@ -86,6 +95,15 @@ public class SecurityConfig {
                     .password(passwordEncoder.encode("aaaaBc12!"))
                     .email("admin@email.com")
                     .roles(Set.of(UserRole.ADMIN))
+                    .build());
+        }
+
+        if (userRepository.findByUsername("user").isEmpty()) {
+            userRepository.save(User.builder()
+                    .username("user")
+                    .password(passwordEncoder.encode("aaaaBc12!"))
+                    .email("user@email.com")
+                    .roles(Set.of(UserRole.USER))
                     .build());
         }
     }
