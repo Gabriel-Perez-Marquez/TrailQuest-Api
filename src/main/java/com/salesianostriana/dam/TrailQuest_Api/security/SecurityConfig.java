@@ -3,25 +3,25 @@ package com.salesianostriana.dam.TrailQuest_Api.security;
 import com.salesianostriana.dam.TrailQuest_Api.model.User;
 import com.salesianostriana.dam.TrailQuest_Api.model.UserRole;
 import com.salesianostriana.dam.TrailQuest_Api.repository.UserRepository;
+import com.salesianostriana.dam.TrailQuest_Api.security.jwt.JwtAuthenticationFilter;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Configuration
 @EnableMethodSecurity
@@ -31,12 +31,11 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    //Esto peta porquye se neceista el UserDetailsService y la clase de PasswordEncoderConfig
-
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UserDetailsService userDetailsService;
 
     @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(authProvider);
@@ -46,12 +45,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/h2-console/**", "/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/pois/route/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pois/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/pois/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 );
 
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
+
         return http.build();
     }
 
