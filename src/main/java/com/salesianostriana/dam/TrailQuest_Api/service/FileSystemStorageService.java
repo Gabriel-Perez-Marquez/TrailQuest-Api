@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 @ConditionalOnProperty(name = "storage.type", havingValue = "local", matchIfMissing = true)
@@ -38,6 +39,7 @@ public class FileSystemStorageService implements StorageService {
         rootLocation = Paths.get(storageLocation);
         try {
             Files.createDirectories(rootLocation);
+            javax.imageio.ImageIO.scanForPlugins();
         } catch (IOException e) {
             throw new StorageException("Could not initialize storage location", e);
         }
@@ -45,19 +47,22 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public FileMetadata store(MultipartFile file)  {
+    public FileMetadata store(MultipartFile file) {
         try {
-            String contentType = file.getContentType();
-            if (contentType == null || !contentType.startsWith("image/")) {
-                throw new com.salesianostriana.dam.TrailQuest_Api.exception.InvalidFileTypeException(
-                        "El archivo debe ser una imagen válida."
-                );
+            if (file.isEmpty()) {
+                throw new StorageException("El archivo está vacío");
             }
 
-            String filename =  store(file.getBytes(), file.getOriginalFilename(), file.getContentType());
-            return LocalFileMetadataImpl.of(filename);
-        } catch (Exception ex) {
-            throw new StorageException("Error storing file: " + file.getOriginalFilename(), ex);
+            String extension = org.springframework.util.StringUtils.getFilenameExtension(file.getOriginalFilename());
+            String newFilename = UUID.randomUUID().toString() + "." + (extension != null ? extension : "jpg");
+
+            try (InputStream inputStream = file.getInputStream()) {
+                Files.copy(inputStream, rootLocation.resolve(newFilename), StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            return LocalFileMetadataImpl.of(newFilename);
+        } catch (IOException e) {
+            throw new StorageException("Error al guardar el archivo en disco", e);
         }
     }
 
@@ -86,44 +91,6 @@ public class FileSystemStorageService implements StorageService {
         } catch (IOException e) {
             throw new StorageException("Could not delete file:" + filename);
         }
-    }
-
-    private String store(byte[] file, String filename, String contentType) throws Exception {
-
-        // Limpiamos el nombre del fichero
-        String newFilename = StringUtils.cleanPath(filename);
-
-        if (file.length == 0)
-            throw new StorageException("The file is empty");
-
-        newFilename = calculateNewFilename(newFilename);
-
-        try (InputStream inputStream = new ByteArrayInputStream(file)) {
-            Files.copy(inputStream, rootLocation.resolve(newFilename),
-                    StandardCopyOption.REPLACE_EXISTING
-            );
-        } catch(IOException ex) {
-            throw new StorageException("Error storing file: " + newFilename, ex);
-        }
-
-        return newFilename;
-    }
-
-    private String calculateNewFilename(String filename) {
-        String newFilename = filename;
-
-        while(Files.exists(rootLocation.resolve(newFilename))) {
-            // Tratamos de generar un nuevo
-            String extension = StringUtils.getFilenameExtension(newFilename);
-            String name = newFilename.replace("." + extension, "");
-
-            String suffix = Long.toString(System.currentTimeMillis());
-            suffix = suffix.substring(suffix.length()-6);
-
-            newFilename = name + "_" + suffix + "." + extension;
-
-        }
-        return newFilename;
     }
 
     private Path load(String filename) {
