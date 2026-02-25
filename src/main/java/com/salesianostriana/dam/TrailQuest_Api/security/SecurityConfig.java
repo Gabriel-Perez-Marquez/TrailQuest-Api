@@ -7,6 +7,7 @@ import com.salesianostriana.dam.TrailQuest_Api.security.error.JwtAccessDeniedHan
 import com.salesianostriana.dam.TrailQuest_Api.security.error.JwtAuthenticationEntryPoint;
 import com.salesianostriana.dam.TrailQuest_Api.security.jwt.JwtAuthenticationFilter;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,8 +71,12 @@ public class SecurityConfig {
                                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 );
-
-
+                .logout(logout -> logout
+                        .logoutUrl("/auth/logout") // URL que escuchará Spring
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                        })
+                )
                 http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/h2-console/**", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pois/route/**").permitAll()
