@@ -80,6 +80,7 @@ public class SecurityConfig {
                 http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**").permitAll()
                         .requestMatchers("/auth/**", "/h2-console/**", "/error").permitAll()
+                        .requestMatchers("/api/routes/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pois/route/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pois/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/pois/**").hasAnyRole("USER", "ADMIN")
