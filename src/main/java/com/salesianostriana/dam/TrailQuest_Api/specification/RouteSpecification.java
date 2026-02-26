@@ -1,7 +1,7 @@
 package com.salesianostriana.dam.TrailQuest_Api.specification;
 
 import com.salesianostriana.dam.TrailQuest_Api.dto.route.RouteFilterDTO;
-import com.salesianostriana.dam.TrailQuest_Api.model.PosiblesRegiones;
+import com.salesianostriana.dam.TrailQuest_Api.model.RouteRegions;
 import com.salesianostriana.dam.TrailQuest_Api.model.Route;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Predicate;
@@ -22,9 +22,9 @@ public class RouteSpecification {
             }
 
             if (filterDTO.regions() != null && !filterDTO.regions().isEmpty()) {
-                List<PosiblesRegiones> regionEnums = new ArrayList<>();
+                List<RouteRegions> regionEnums = new ArrayList<>();
                 for (String region : filterDTO.regions()) {
-                    regionEnums.add(PosiblesRegiones.valueOf(region));
+                    regionEnums.add(RouteRegions.valueOf(region));
                 }
                 predicates.add(root.get("region").in(regionEnums));
             }

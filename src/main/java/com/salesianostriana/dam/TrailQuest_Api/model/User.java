@@ -1,5 +1,7 @@
 package com.salesianostriana.dam.TrailQuest_Api.model;
 
+import com.salesianostriana.dam.TrailQuest_Api.validation.StrongPassword;
+import com.salesianostriana.dam.TrailQuest_Api.validation.UniqueEmail;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -28,25 +30,29 @@ public class User implements UserDetails {
     @GeneratedValue
     private UUID id;
 
-    @NotBlank(message = "El nombre de usuario no puede estar vacío")
-    @Size(min = 4, max = 20, message = "El usuario debe tener entre 4 y 20 caracteres")
+    @NotBlank(message = "{user.username.notblank}")
+    @Size(min = 4, max = 20, message = "{user.username.size}")
     @Column(unique = true, nullable = false)
     private String username;
 
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
+    @NotBlank(message = "{user.password.notblank}")
+    @Size(min = 8, message = "{user.password.size}")
+    @StrongPassword
     private String password;
 
-    @Email(message = "Debe proporcionar un correo electrónico válido")
-    @NotBlank(message = "El email no puede estar vacío")
+    @Email(message = "{user.email.email}")
+    @NotBlank(message = "{user.email.notblank}")
     @Column(unique = true, nullable = false)
+    @UniqueEmail
     private String email;
 
-    @NotEmpty(message = "El usuario debe tener al menos un rol")
+    @NotEmpty(message = "{user.roles.notempty}")
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles = new HashSet<>();
+
+    private String avatar;
 
 
     @Override

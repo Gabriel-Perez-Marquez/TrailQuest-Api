@@ -1,8 +1,12 @@
 package com.salesianostriana.dam.TrailQuest_Api.dto.route;
-import com.salesianostriana.dam.TrailQuest_Api.model.PosiblesRegiones;
+import com.salesianostriana.dam.TrailQuest_Api.model.RouteRegions;
 import com.salesianostriana.dam.TrailQuest_Api.model.Route;
+import com.salesianostriana.dam.TrailQuest_Api.model.RouteDifficulty;
+import com.salesianostriana.dam.TrailQuest_Api.model.LatLng;
+import com.salesianostriana.dam.TrailQuest_Api.validation.ValidDistance;
 import jakarta.validation.constraints.*;
 import java.util.UUID;
+import java.util.List;
 
 public record RouteCreateDTO(
 
@@ -14,7 +18,7 @@ public record RouteCreateDTO(
         String region,
 
         @NotNull(message = "La distancia es obligatoria")
-        @Positive(message = "La distancia debe ser positiva")
+        @ValidDistance(message = "La distancia debe ser mayor a 0.1 km (100 metros)")
         Double distanceKm,
 
         @NotNull(message = "La dificultad es obligatoria")
@@ -24,18 +28,27 @@ public record RouteCreateDTO(
         UUID creatorId,
 
         @NotNull(message = "El ID de la imagen es obligatorio")
-        UUID coverFileId
+        String coverFileId,
 
+        @NotNull(message = "La elevación es obligatoria")
+        @Min(value = 0, message = "La elevación no puede ser negativa")
+        Integer elevation,
+
+        @NotNull(message = "Los puntos de la ruta son obligatorios")
+        @NotEmpty(message = "La lista de puntos de ruta no puede estar vacía")
+        List<LatLng> pathPoints
 
 ) {
     public Route toEntity() {
     Route route = new Route();
         route.setTitle((this.title()));
-        route.setRegion(PosiblesRegiones.valueOf((this.region())));
+        route.setRegion(RouteRegions.valueOf((this.region())));
         route.setDistanceKm((this.distanceKm()));
-        route.setDifficulty((this.difficulty()));
+        route.setDifficulty(RouteDifficulty.valueOf((this.difficulty())));
         route.setCreatorId((this.creatorId()));
         route.setCoverFileId((this.coverFileId()));
+        route.setElevation((this.elevation()));
+        route.setPathPoints((this.pathPoints()));
     return route;
     }
 }
