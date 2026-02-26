@@ -56,6 +56,7 @@ public class Route {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "route_path_points", joinColumns = @JoinColumn(name = "route_id"))
+    @Builder.Default
     private List<LatLng> pathPoints = new ArrayList<>();
 
     @Builder.Default

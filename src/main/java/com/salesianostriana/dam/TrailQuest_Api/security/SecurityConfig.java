@@ -78,6 +78,7 @@ public class SecurityConfig {
                         })
                 );
                 http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**").permitAll()
                         .requestMatchers("/auth/**", "/h2-console/**", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pois/route/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pois/**").hasAnyRole("USER", "ADMIN")
@@ -100,6 +101,7 @@ public class SecurityConfig {
                     .password(passwordEncoder.encode("aaaaBc12!"))
                     .email("admin@email.com")
                     .roles(Set.of(UserRole.ADMIN))
+                    .avatar("bob.png")
                     .build());
         }
 
@@ -109,6 +111,7 @@ public class SecurityConfig {
                     .password(passwordEncoder.encode("aaaaBc12!"))
                     .email("user@email.com")
                     .roles(Set.of(UserRole.USER))
+                    .avatar("bob.png")
                     .build());
         }
     }

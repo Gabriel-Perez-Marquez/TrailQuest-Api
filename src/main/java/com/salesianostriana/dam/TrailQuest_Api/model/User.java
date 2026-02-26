@@ -52,6 +52,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles = new HashSet<>();
 
+    private String avatar;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
