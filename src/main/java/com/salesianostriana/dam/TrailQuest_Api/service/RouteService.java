@@ -30,6 +30,14 @@ public class RouteService {
         Route existingRoute = routeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ruta no encontrada con id: " + id));
 
+        // Actualizar solo los campos que no sean null
+        if (routeUpdates.getTitle() != null) existingRoute.setTitle(routeUpdates.getTitle());
+        if (routeUpdates.getRegion() != null) existingRoute.setRegion(routeUpdates.getRegion());
+        if (routeUpdates.getDistanceKm() != null) existingRoute.setDistanceKm(routeUpdates.getDistanceKm());
+        if (routeUpdates.getDifficulty() != null) existingRoute.setDifficulty(routeUpdates.getDifficulty());
+        if (routeUpdates.getCoverFileId() != null) existingRoute.setCoverFileId(routeUpdates.getCoverFileId());
+        if (routeUpdates.getElevation() != null) existingRoute.setElevation(routeUpdates.getElevation());
+        if (routeUpdates.getPathPoints() != null) existingRoute.setPathPoints(routeUpdates.getPathPoints());
 
         return routeRepository.save(existingRoute);
     }
