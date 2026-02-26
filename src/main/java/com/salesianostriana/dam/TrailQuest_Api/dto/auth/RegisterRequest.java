@@ -21,6 +21,8 @@ public record RegisterRequest(
         @NotBlank(message = "{registerRequest.email.notblank}")
         @Email(message = "{registerRequest.email.email}")
         @UniqueEmail
-        String email
+        String email,
+
+        String avatar
 ) {
 }
