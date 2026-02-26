@@ -9,7 +9,7 @@ public record FavouriteResponse(
         @Schema(description = "Nombre de la ruta")
         String routeName,
 
-        @Schema(description = "Región de la ruta", example = "ITALIA")
+        @Schema(description = "Región de la ruta", example = "GALICIA")
         String region
 ) {
 }
